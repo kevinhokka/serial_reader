@@ -8,16 +8,20 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(nav_msgs)
-find_package(sensor_msgs)
+find_package(nav_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 add_executable(serial_reader_node src/serial_reader_node.cpp)
+
 ament_target_dependencies(serial_reader_node
   rclcpp
   nav_msgs
   sensor_msgs
 )
+
+# 如果在你的系统上需要显式链接 pthread，可以取消下面一行的注释
+# target_link_libraries(serial_reader_node pthread)
+
 install(TARGETS
   serial_reader_node
   DESTINATION lib/${PROJECT_NAME}
@@ -25,12 +29,9 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
+  # 跳过版权检查
   set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
+  # 跳过 cpplint
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
